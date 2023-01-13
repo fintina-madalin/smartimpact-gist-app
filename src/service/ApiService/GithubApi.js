@@ -9,18 +9,30 @@ class GithubAPI {
     }
 
     async getUser(username) {
+        try {
             const {data} = await this.client.get(`/users/${username}`);
             return data;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getGists(username) {
+        try {
             const {data} = await this.client.get(`/users/${username}/gists`);
             return data;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getGist(url) {
+        try {
             const {data} = await this.client.get(url);
-            return data;
+            throw data;
+        } catch (error) {
+            return error;
+        }
     }
 }
 

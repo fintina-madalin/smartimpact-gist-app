@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+## Single page application that displays the gists of a Github user
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To run the project locally either have node installed or docker. The project has a list of small utility commands in a Makefile. If you have make installed and docker you can use them to make your life easier.
 
-## Available Scripts
+### Running the project locally
+#### Node: [How to install node](https://nodejs.org/en/)
+ - run `npm start` this will run the app in development mode
+ - Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-In the project directory, you can run:
+#### Docker: [How to install docker](https://docs.docker.com/get-docker/)
+- run `docker-compose build && docker-compose up -d` this will create a docker container and  run the app in development mode
+- Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### `npm start`
+### Make utilities:
+`make build` - will run `docker-compose build`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+`make up` - will run `make build` and `docker-compose up -d`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+`make shell` - this will open a ssh connection for the application container. Use this to run various `npm` commands into the application container 
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Project requirements:
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Create a single page application (a web page) using your preferred frontend framework (React, Vue, Angular, etc), that will use the Github Gists API to display the gists for a Github user (https://docs.github.com/en/rest/gists/gists#list-gists-for-a-user).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. There will be an input for the username of the Github user.
+2. You will load some info about this username (image, name, description) and also their public gists.
+3. Their gists will be loaded with 1) their title, date of creation; 2) their programming language as a colored badge; 3) a list of their forks and the users that forked them.
+4. On click, the gist will be loaded in a syntax-highlighted code viewer.
+5. Optimize the page for performance.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Other features are also nice to have, but the focus should be on the items above.
 
-### `npm run eject`
+The project will be delivered in a github repo (please make the repo public). Add a readme to the project, describing how to install and start the project. Also add to the readme file:
+- what has been done, what technical decisions have been taken
+- what optimizations have been done and what would be the next steps.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### Current state of the project:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ - Currently, the project features a form(where the username can be inserted), a small preview of the user details(name, image, bio) and a list of public gists for the user.
+Each  gist contains the name of the file, date of creation, the content(displayed with a sintax highlighter), the language badge and a hide show button for the content
+ - To optimize the requests to the github api the react-query package was  used
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### To implement in the future:
+- add pagination for gists
+- add a github token to increase the hourly requests limit
+- improve error handling and error messages for various scenarios(user not found, request limit exceeded)

@@ -1,20 +1,21 @@
-import './App.css';
 import {useEffect, useState} from 'react';
-import { useQuery } from 'react-query';
+import {useQuery} from 'react-query';
 import GistList from './components/GistList';
 import UserInfo from './components/UserInfo';
 import GithubAPI from './service/ApiService';
-import { Alert, Button, Container, Form } from 'react-bootstrap';
+import {Alert, Button, Container, Form} from 'react-bootstrap';
 
 function App() {
     const api = new GithubAPI();
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
 
-    const { data: user, status: userStatus } = useQuery(
+    const {data: user, status: userStatus} = useQuery(
         ['user', username],
         async () => {
+            if (username) {
                 return await api.getUser(username);
+            }
         },
         {
             refetchOnWindowFocus: false,
@@ -22,16 +23,12 @@ function App() {
         }
     );
 
-    useEffect(() => {
-        if (userStatus === 'error') {
-            setError(user.message);
-        }
-    }, [userStatus, user]);
-
-    const { data: gists, status } = useQuery(
+    const {data: gists, status} = useQuery(
         ['gists', username],
         async () => {
+            if (username) {
                 return await api.getGists(username);
+            }
         },
         {
             refetchOnWindowFocus: false,
@@ -40,13 +37,11 @@ function App() {
     );
 
     useEffect(() => {
-        if (status === 'error') {
-            setError(gists.message);
+        if (status === 'error' || userStatus === 'error') {
+            setError('Something went wrong!');
         }
-    }, [status, gists]);
+    }, [status, userStatus]);
 
-console.log({status})
-console.log({error})
     return (
         <Container className="mt-4">
             <Form className="center" onSubmit={(e) => {
@@ -54,7 +49,7 @@ console.log({error})
                 setUsername(e.target.elements.username.value);
             }}>
                 <Form.Group className="mb-3">
-                    <Form.Control id="username" type="text" placeholder="Enter username" />
+                    <Form.Control id="username" type="text" placeholder="Enter username"/>
                     <Button type="submit">Submit</Button>
                 </Form.Group>
             </Form>

@@ -3,10 +3,11 @@ import {Card, Button, Badge} from 'react-bootstrap';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {atomOneDark} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import GithubApi from "../../service/ApiService/GithubApi";
+import {getLanguageColor} from "../../helpers";
 
 function Gist({gist}) {
     const [showCode, setShowCode] = useState(false);
-    const [content,  setContent] = useState(false);
+    const [content, setContent] = useState(false);
     const data = gist.files[Object.keys(gist.files)[0]]
 
     useEffect(() => {
@@ -20,16 +21,19 @@ function Gist({gist}) {
     return (
         <Card className="mt-2 p-1">
             <Card.Header>
-                <Card.Title className="p-2">{data.filename} | Created at: {gist.created_at}
-                <Badge variant={data.language ? 'secondary' : 'warning'} className="ml-2 p-2 float-end">
-                    {data.language}
-                </Badge>
+                <Card.Title className="p-2">{data.filename}
+                    {data.language &&
+                        <span style={{background: getLanguageColor(data.language), color: "white"}}
+                              className=" p-1 float-end">
+                        {data.language}
+                    </span>}
                 </Card.Title>
+                <Card.Subtitle> Created at: {gist.created_at}</Card.Subtitle>
+            </Card.Header>
+            <Card.Body>
                 <Button variant="outline-danger" className="float-end" onClick={() => setShowCode(!showCode)}>
                     {showCode ? 'Hide' : 'Show'} Code
                 </Button>
-            </Card.Header>
-            <Card.Body>
                 {showCode && (
                     <SyntaxHighlighter language={data.language} style={atomOneDark}>
                         {content}
